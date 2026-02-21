@@ -117,22 +117,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   function initializeVisitorCounter() {
-    let totalVisitors = localStorage.getItem('totalVisitorCount');
-    if (!totalVisitors) {
-      totalVisitors = 921234;
-      localStorage.setItem('totalVisitorCount', totalVisitors);
-    } else {
-      totalVisitors = parseInt(totalVisitors);
-    }
-
-    const hasVisited = localStorage.getItem('hasVisited');
-    if (!hasVisited) {
-      totalVisitors++;
-      localStorage.setItem('totalVisitorCount', totalVisitors);
-      localStorage.setItem('hasVisited', 'true');
-    }
-
-    visitorCount.textContent = totalVisitors.toLocaleString();
+    visitorCount.textContent = '...';
+    fetch('/api/views')
+      .then(res => res.json())
+      .then(data => {
+        visitorCount.textContent = data.count.toLocaleString();
+      })
+      .catch(() => {
+        visitorCount.textContent = '0';
+      });
   }
 
 
@@ -201,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  const name = "JAQLIV";
+  const name = "alb";
   let nameText = '';
   let nameIndex = 0;
   let isNameDeleting = false;
@@ -236,8 +229,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   const bioMessages = [
-    "Fu*k Guns.lol & Fakecrime.bio got banned too often, so I created my own.",
-    "\"Hello, World!\""
+    "i made my own guns.lol fake lol",
+    "Hello World!"
   ];
   let bioText = '';
   let bioIndex = 0;
