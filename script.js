@@ -1,5 +1,61 @@
 let hasUserInteracted = false;
 
+// YouTube Audio Player
+let ytPlayer = null;
+let ytPlaying = false;
+
+function onYouTubeIframeAPIReady() {
+  ytPlayer = new YT.Player('yt-player', {
+    height: '1',
+    width: '1',
+    videoId: 'T5EHf0iquW0',
+    playerVars: {
+      autoplay: 0,
+      loop: 1,
+      playlist: 'T5EHf0iquW0'
+    },
+    events: {
+      onReady: function(event) {
+        event.target.setVolume(30);
+      },
+      onStateChange: function(event) {
+        if (event.data === YT.PlayerState.ENDED) {
+          ytPlayer.playVideo();
+        }
+      }
+    }
+  });
+}
+
+function toggleYTPlayer() {
+  if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
+  const playIcon = document.getElementById('yt-play-icon');
+  const pauseIcon = document.getElementById('yt-pause-icon');
+
+  if (ytPlaying) {
+    ytPlayer.pauseVideo();
+    ytPlaying = false;
+    playIcon.style.display = '';
+    pauseIcon.style.display = 'none';
+  } else {
+    ytPlayer.playVideo();
+    ytPlaying = true;
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = '';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const ytAudioPlayer = document.getElementById('yt-audio-player');
+  if (ytAudioPlayer) {
+    ytAudioPlayer.addEventListener('click', toggleYTPlayer);
+    ytAudioPlayer.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      toggleYTPlayer();
+    });
+  }
+});
+
 function initMedia() {
   console.log("initMedia called");
   const backgroundMusic = document.getElementById('background-music');
