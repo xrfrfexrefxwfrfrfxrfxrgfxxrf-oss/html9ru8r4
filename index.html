@@ -15,13 +15,14 @@
         
         .custom-cursor {
             position: fixed;
-            width: 40px;
-            height: 40px;
-            background: url('assets/custom_cursor.png') no-repeat center center;
-            background-size: contain;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px 4px rgba(255, 255, 255, 0.6), 0 0 20px 10px rgba(255, 255, 255, 0.3), 0 0 40px 20px rgba(255, 255, 255, 0.1);
         }
 
         
@@ -870,7 +871,7 @@
         <div id="profile-block">
             <div class="profile-header">
                 <div class="profile-container">
-                    <img src="assets/profile.gif" alt="Profile" class="profile-picture">
+                    <img src="assets/profile.png" alt="Profile" class="profile-picture">
                 </div>
                 <div class="profile-info">
                     <div class="name-and-badges">
@@ -893,14 +894,6 @@
                                     <div class="badge-container">
                                         <img src="assets/bug_bounty.gif" alt="Bug Bounty" class="badge">
                                         <span class="tooltip">Bug Bounty</span>
-                                    </div>
-                                    <div class="badge-container">
-                                        <img src="assets/hated_guns.gif" alt="Hated by Guns.lol" class="badge">
-                                        <span class="tooltip">Hated by Guns.lol</span>
-                                    </div>
-                                    <div class="badge-container">
-                                        <img src="assets/hated_fakecrime.gif" alt="Hated by Fakecrime.bio" class="badge">
-                                        <span class="tooltip">Hated by Fakecrime.bio</span>
                                     </div>
                                     <div class="badge-container">
                                         <img src="assets/rule_maker.gif" alt="Rule Maker" class="badge">
