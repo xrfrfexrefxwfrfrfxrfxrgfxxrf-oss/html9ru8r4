@@ -3,6 +3,7 @@ let hasUserInteracted = false;
 // YouTube Audio Player
 let ytPlayer = null;
 let ytPlaying = false;
+let ytUnmuted = false;
 
 function onYouTubeIframeAPIReady() {
   ytPlayer = new YT.Player('yt-player', {
@@ -10,15 +11,24 @@ function onYouTubeIframeAPIReady() {
     width: '1',
     videoId: 'T5EHf0iquW0',
     playerVars: {
-      autoplay: 0,
+      autoplay: 1,
       loop: 1,
       playlist: 'T5EHf0iquW0'
     },
     events: {
       onReady: function(event) {
         event.target.setVolume(30);
+        event.target.mute();
+        event.target.playVideo();
       },
       onStateChange: function(event) {
+        if (event.data === YT.PlayerState.PLAYING && !ytPlaying) {
+          ytPlaying = true;
+          var playIcon = document.getElementById('yt-play-icon');
+          var pauseIcon = document.getElementById('yt-pause-icon');
+          if (playIcon) playIcon.style.display = 'none';
+          if (pauseIcon) pauseIcon.style.display = '';
+        }
         if (event.data === YT.PlayerState.ENDED) {
           ytPlayer.playVideo();
         }
@@ -27,10 +37,33 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
+// Unmute on first user interaction anywhere on the page
+function ytUnmuteOnInteraction() {
+  if (ytUnmuted) return;
+  if (ytPlayer && typeof ytPlayer.unMute === 'function') {
+    ytPlayer.unMute();
+    ytPlayer.setVolume(30);
+    ytUnmuted = true;
+  }
+  document.removeEventListener('click', ytUnmuteOnInteraction);
+  document.removeEventListener('touchstart', ytUnmuteOnInteraction);
+  document.removeEventListener('keydown', ytUnmuteOnInteraction);
+}
+document.addEventListener('click', ytUnmuteOnInteraction);
+document.addEventListener('touchstart', ytUnmuteOnInteraction);
+document.addEventListener('keydown', ytUnmuteOnInteraction);
+
 function toggleYTPlayer() {
   if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
   const playIcon = document.getElementById('yt-play-icon');
   const pauseIcon = document.getElementById('yt-pause-icon');
+
+  // Ensure unmuted when user interacts with the player
+  if (!ytUnmuted && typeof ytPlayer.unMute === 'function') {
+    ytPlayer.unMute();
+    ytPlayer.setVolume(30);
+    ytUnmuted = true;
+  }
 
   if (ytPlaying) {
     ytPlayer.pauseVideo();
